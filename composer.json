@@ -1,0 +1,12 @@
+{
+    "name": "flexpress/component-search",
+    "description": "WordPress search manager",
+    "autoload": {
+        "psr-4": {
+            "FlexPress\\Components\\Search\\": "src/FlexPress/Components/Search/"
+        }
+    },
+    "require": {
+        "symfony/http-foundation": "2.0.7"
+    }
+}
