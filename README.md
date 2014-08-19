@@ -221,10 +221,23 @@ $this->metaFilterHelper->outputMetaSearch(
 - If you now place the code into your outputFilters() method and call it whereever you want to display your filters you are all done.
 
 ## Public methods
-- processSearch
+- processSearch() - Used to process the search and collect the results.
+- setQueryVar($key, $value) - Setters for a query var.
+- getQueryVar($key) - Getter for a query var.
+- queryVarExists($key) - Checks if a query var exists.
+- getQueryString() - Gets the urlencoded GET string used for none ajax searches.
+- getQuerySQL - Gets the sql array by combining the base sql with all the calls to the query builders.
+- getTotalPosts() - Returns the total numbers of posts.
+- getTotalResultsPerPage() - Returns how many posts are displayed per page.
+- havePosts() - Same as wordpress loop code for have_posts.
+- thePost() - Same as wordpress loop for for the_post but it will return the post object instead of making it global.
+- outputResults() - Abstract and needs implementing in conrecreate class, used to output the results.
 
 ## Protected methods
-- init 
-- setupQueryVars
-- getUniqueQueryKey
-- 
+
+- init() - Resets all the vars.
+- setupQueryVars() - Uses the query builders list of query vars to grab them from the request and store.
+- getUniqueQueryKey($key) - For a given query var name returns a unique var name, of which includes the namespace and class name.
+- getResults() - Uses the sql array and runs the query to get the results.
+- getBaseSQL() - Returns the base array of sql.
+- getSearchablePostTypes() - Abstract method that you need to implement, must return an array of searchable post types.
