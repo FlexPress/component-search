@@ -132,3 +132,90 @@ $pimple['searchManager'] = function($c) {
     <option value="26">Some other page</option>
 </select>
 ```
+## Filter Helpers
+- Filter helpers are a tad more difficult than the QueryBuilders as you need to hook them up to the related QueryBuilder.
+- FilterHelpers allow you to create a reusable helper to output filters.
+- In this example we will go over the meta filter helper
+```
+
+$this->metaFilterHelper->setSearchableKeys(array("fp_page_layout"));
+$this->metaFilterHelper->outputMetaSearch(
+  function ($metaKey, $metaValues, $formattedMetaKey) {
+  
+    echo '<label for="', $metaKey, '">', $formattedMetaKey, '</label>';
+    echo '<select name="', $this->getUniqueQueryKey(MetaQueryBuilder::FILTER_VAR_META), '[', $metaKey, ']">';
+    
+    foreach ($metaValues as $metaValue) {
+      echo '<option>', $metaValue, '</option>';
+    }
+    
+    echo '</select>';
+    
+  }
+);
+```
+- Lets run through this example, first you will notice that we are accessing the metaHelper property on ourself, you would inject this as a dependacy using pimple like this:
+```
+$this["metaFilterHelper"] = function () {
+    return new MetaFilterHelper();
+};
+
+$this["Search"] = function ($c) {
+    return new Search($c["DatabaseAdapter"], $c["Queue"], $c["Request"], array(
+        $c["TextQueryBuilder"]
+    ),
+    $c["metaFilterHelper"] // you would add it like this or you could use an array like above if you had multiple ones, this is left up to you.
+    );
+};
+```
+- You would also have to change your constructor on your concreate class:
+```
+public function __construct(
+    \wpdb $databaseAdapter,
+    \SplQueue $queryBuilders,
+    Request $request,
+    array $queryBuildersArray,
+    MetaFilterHelper $metaFilterHelper // add it in here
+) {
+    parent::__construct(
+        $databaseAdapter,
+        $queryBuilders,
+        $request,
+        $queryBuildersArray
+    );
+
+    // assign it
+    $this->metaFilterHelper = $metaFilterHelper;
+
+}
+```
+- Next you will notice that we calling setSearchableKeys:
+```
+$this->metaFilterHelper->setSearchableKeys(array("fp_page_layout"));
+```
+- Here you are specifying what keys you want to be passed back to the callable that you will implement next, this allows you to write one method to output the filter for a given standard input. This means you can create a standard select box or something to show the list of meta options and when you want to add another searchable meta option you can just add it to the array and as you have already implemented the code to output it you are all done, saving a lot of time and making the filter very flexible.
+- So now we should look at what the callable is doing:
+```
+$this->metaFilterHelper->outputMetaSearch(
+  function ($metaKey, $metaValues, $formattedMetaKey) {
+  
+    echo '<label for="', $metaKey, '">', $formattedMetaKey, '</label>';
+    echo '<select name="', $this->getUniqueQueryKey(MetaQueryBuilder::FILTER_VAR_META), '[', $metaKey, ']">';
+    
+    foreach ($metaValues as $metaValue) {
+      echo '<option>', $metaValue, '</option>';
+    }
+    
+    echo '</select>';
+    
+  }
+);
+```
+- You call the outputMetaSearch method and supply a function that takes the params, $metaKey, $metaValues and $formattedMetaKey, of which are fairly self explanatory, the $formattedMetaKey just makes the meta key readable so my_meta_key becomes My Meta Key, which you can use for your label.
+- Inside the method you then output a single field, as this method is called for each meta key you speficifed previously (setSearchableKeys).
+```
+    echo '<select name="', $this->getUniqueQueryKey(MetaQueryBuilder::FILTER_VAR_META), '[', $metaKey, ']">';
+```
+- This is the important line, what it is doing is getting you a unique key for the given search class, which include the namespace, this allows you to have multiple searches on a single page.
+- We then have to hook this up to a QueryBuilder so we grab the constant for FILTER_VAR_XXX from MetaQueryBuilder, so now we have the correct key but we need to format it correctly, for the meta query builder it expects an array of key => values, so we use [] to notable it in an array and place the $metaKey inside of them and we are all done.
+- If you now place the code into your outputFilters() method and call it whereever you want to display your filters you are all done.
