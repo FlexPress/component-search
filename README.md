@@ -228,7 +228,6 @@ $this->metaFilterHelper->outputMetaSearch(
 - getQueryString() - Gets the urlencoded GET string used for none ajax searches.
 - getQuerySQL - Gets the sql array by combining the base sql with all the calls to the query builders.
 - getTotalPosts() - Returns the total numbers of posts.
-- getTotalResultsPerPage() - Returns how many posts are displayed per page.
 - havePosts() - Same as wordpress loop code for have_posts.
 - thePost() - Same as wordpress loop for for the_post but it will return the post object instead of making it global.
 - outputResults() - Abstract and needs implementing in conrecreate class, used to output the results.
@@ -241,3 +240,23 @@ $this->metaFilterHelper->outputMetaSearch(
 - getResults() - Uses the sql array and runs the query to get the results.
 - getBaseSQL() - Returns the base array of sql.
 - getSearchablePostTypes() - Abstract method that you need to implement, must return an array of searchable post types.
+ 
+## Additonal methods in AbstractPaginatedSearch
+
+### Public methods
+- getTotalResultsPerPage() - Returns how many posts are displayed per page.
+- thePreviousPageLink() - Gets the link to the previous page.
+- theNextPageLink() - Gets the link to the next page.
+- getPageLink($page_no) - Gets the link to a given page number.
+- requiresPagination() - Allows you to check if you need pagination.
+- hasMorePages() - Allows you to check if there are any more pages.
+- hasPreviousPages() - Allows you to check if there are any previous pages.
+- outputNumberedPaginationLinks($number_padding = 5, classes = array("page-numbers"), $current_class = "is-current" ) - Outputs a numbered pagination list e.g. Prev 1 2 3 4 5 Next
+- getPreviousPageNo() - Gets the previous page number
+- getNextPageNo() - Gets the next page number
+- getPageNo() - Gets the current page number
+
+### Protected methods
+
+- getPagePosts() - Gets the array of result posts for the current page
+- outputPagination() - Abstract method you must implement, used to output the pagination.
