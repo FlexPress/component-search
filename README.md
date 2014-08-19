@@ -219,3 +219,12 @@ $this->metaFilterHelper->outputMetaSearch(
 - This is the important line, what it is doing is getting you a unique key for the given search class, which include the namespace, this allows you to have multiple searches on a single page.
 - We then have to hook this up to a QueryBuilder so we grab the constant for FILTER_VAR_XXX from MetaQueryBuilder, so now we have the correct key but we need to format it correctly, for the meta query builder it expects an array of key => values, so we use [] to notable it in an array and place the $metaKey inside of them and we are all done.
 - If you now place the code into your outputFilters() method and call it whereever you want to display your filters you are all done.
+
+## Public methods
+- processSearch
+
+## Protected methods
+- init 
+- setupQueryVars
+- getUniqueQueryKey
+- 
