@@ -17,7 +17,7 @@ class Meta extends AbstractHelper
      * @throws \RuntimeException
      * @author Tim Perry
      */
-    protected function outputMetaSearch($callable)
+    public function outputMetaSearch($callable)
     {
 
         if (!isset($this->searchableKeys)) {
