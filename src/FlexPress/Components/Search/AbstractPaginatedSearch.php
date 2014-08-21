@@ -300,6 +300,19 @@ abstract class AbstractPaginatedSearch extends AbstractSearch
         return $this->totalPages;
     }
 
+    /**
+     *
+     * Returns how many results should be display per page
+     *
+     * @return mixed
+     * @author Tim Perry
+     *
+     */
+    protected function getTotalResultsPerPage()
+    {
+        return 10;
+    }
+    
     // ===================
     // ! LOOP CODE
     // ===================
