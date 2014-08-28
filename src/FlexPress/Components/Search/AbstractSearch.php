@@ -329,9 +329,9 @@ abstract class AbstractSearch
 
         $sql["select"] = "select SQL_CALC_FOUND_ROWS p.* ";
 
-        $sql["from"] .= "from $posts as p ";
+        $sql["from"] = "from $posts as p ";
 
-        $sql["where"] .= "where p.post_type in ( '" . implode("' ,'", $this->getSearchablePostTypes()) . "' ) ";
+        $sql["where"] = "where p.post_type in ( '" . implode("' ,'", $this->getSearchablePostTypes()) . "' ) ";
         $sql["where"] .= "and p.post_status in ( 'publish' ) ";
 
         $sql["groupby"] = "group by p.ID";
